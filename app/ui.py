@@ -224,90 +224,166 @@ class UI:
             UI.AdvancedSettingsWindow(self)
 
     class MainWindow(ttk.Window):
-        def change_theme(self, theme_name: str) -> None:
-            self.style.theme_use(theme_name)
-
         def __init__(self):
+            # Initialize with default theme
+            super().__init__(themename="superhero")
+            
+            # Load settings
             settings = Settings()
             settings_dict = settings.get_dict()
-            theme = settings_dict.get('theme', 'superhero')
-
-            super().__init__(themename=theme)
+            self._current_theme = settings_dict.get('theme', 'superhero')
+            
+            # Set window properties
             self.title('Jarjit')
-            window_width = 420
-            window_height = 250
+            
+            # Increased window dimensions
+            window_width = 900  # Increased from 480
+            window_height = 600  # Increased from 320
             self.minsize(window_width, window_height)
-
-            # Set the geometry of the window
-            # Calculate position for bottom right corner
+            
+            # Center window on screen
             screen_width = self.winfo_screenwidth()
-            x_position = screen_width - window_width - 10  # 10px margin from the right edge
-            y_position = 50  # 50px margin from the bottom edge
+            screen_height = self.winfo_screenheight()
+            x_position = (screen_width - window_width) // 2
+            y_position = (screen_height - window_height) // 2
             self.geometry(f'{window_width}x{window_height}+{x_position}+{y_position}')
 
-            # PhotoImage object needs to persist as long as the app does, hence it's a class object.
+            # Configure styles using local variable
+            style = ttk.Style()
+            style.theme_use(self._current_theme)
+            
+            # Configure custom styles with larger fonts
+            style.configure('Custom.TEntry', 
+                padding=12,  # Increased padding
+                font=('Helvetica', 14)  # Larger font
+            )
+            style.configure('Custom.TButton',
+                padding=10,  # Increased padding
+                font=('Helvetica', 13, 'bold')  # Larger font
+            )
+            style.configure('Title.TLabel',
+                font=('Helvetica', 28, 'bold'),  # Larger font
+                padding=20  # Increased padding
+            )
+            style.configure('Status.TLabel',
+                font=('Helvetica', 13),  # Larger font
+                padding=8  # Increased padding
+            )
+
+            # Load resources with larger icons
             path_to_icon_png = Path(__file__).resolve().parent.joinpath('resources', 'icon.png')
             path_to_microphone_png = Path(__file__).resolve().parent.joinpath('resources', 'microphone.png')
-            self.logo_img = ImageTk.PhotoImage(Image.open(path_to_icon_png).resize((50, 50)))
-            self.mic_icon = ImageTk.PhotoImage(Image.open(path_to_microphone_png).resize((18, 18)))
+            self.logo_img = ImageTk.PhotoImage(Image.open(path_to_icon_png).resize((64, 64)))  # Larger icon
+            self.mic_icon = ImageTk.PhotoImage(Image.open(path_to_microphone_png).resize((24, 24)))  # Larger mic icon
 
-            # This adds app icon in linux which pyinstaller can't
-            self.tk.call('wm', 'iconphoto', self._w, self.logo_img)
+            # Set app icon
+            self.iconphoto(True, self.logo_img)
 
-            # MP Queue to facilitate communication between UI and Core.
-            # Put user requests received from UI text box into this queue which will then be dequeued in App to be sent
-            # to core.
+            # Initialize queue
             self.user_request_queue = Queue()
 
+            # Create widgets
             self.create_widgets()
 
+        def change_theme(self, theme: str) -> None:
+            """Change the application theme"""
+            if theme != self._current_theme:
+                style = ttk.Style()
+                style.theme_use(theme)
+                self._current_theme = theme
+
         def create_widgets(self) -> None:
-            # Creates and arranges the UI elements
-            # Frame
-            frame = ttk.Frame(self, padding='10 10 10 10')
+            # Main container with more padding
+            frame = ttk.Frame(self, padding='30 30 30 30')  # Increased padding
             frame.grid(column=0, row=0, sticky=(ttk.W, ttk.E, ttk.N, ttk.S))
             frame.columnconfigure(0, weight=1)
+            
+            # Top section with logo and title
+            top_frame = ttk.Frame(frame)
+            top_frame.grid(column=0, row=0, sticky=(ttk.W, ttk.E), pady=(0, 30))  # Increased spacing
+            
+            logo_label = ttk.Label(top_frame, image=self.logo_img)
+            logo_label.pack(side='left', padx=(0, 20))  # Increased spacing
+            
+            heading_label = ttk.Label(
+                top_frame, 
+                text='What would you like me to do?',
+                style='Title.TLabel'
+            )
+            heading_label.pack(side='left', fill='x', expand=True)
 
-            logo_label = ttk.Label(frame, image=self.logo_img)
-            logo_label.grid(column=0, row=0, sticky=ttk.W, pady=(10, 20))
+            # Input section with larger wraplength
+            input_frame = ttk.Frame(frame)
+            input_frame.grid(column=0, row=1, sticky=(ttk.W, ttk.E), pady=15)
+            input_frame.columnconfigure(0, weight=1)
 
-            # Heading Label
-            heading_label = ttk.Label(frame, text='What would you like me to do?', font=('Helvetica', 16),
-                                      bootstyle="primary",
-                                      wraplength=300)
-            heading_label.grid(column=0, row=1, columnspan=3, sticky=ttk.W)
+            self.entry = ttk.Entry(
+                input_frame, 
+                style='Custom.TEntry',
+                font=('Helvetica', 14)  # Larger font
+            )
+            self.entry.grid(column=0, row=0, sticky=(ttk.W, ttk.E))
+            
+            mic_button = ttk.Button(
+                input_frame,
+                image=self.mic_icon,
+                bootstyle="link-outline",
+                command=self.start_voice_input_thread
+            )
+            mic_button.grid(column=1, row=0, padx=8)  # Increased spacing
+            
+            submit_button = ttk.Button(
+                input_frame,
+                text='Submit',
+                style='Custom.TButton',
+                bootstyle="success",
+                command=self.execute_user_request
+            )
+            submit_button.grid(column=2, row=0, padx=(8, 0))  # Increased spacing
 
-            # Entry widget
-            self.entry = ttk.Entry(frame, width=30)
-            self.entry.grid(column=0, row=2, sticky=(ttk.W, ttk.E))
+            # Status displays with larger wraplength
+            self.input_display = ttk.Label(
+                frame,
+                text='',
+                style='Status.TLabel',
+                wraplength=700  # Increased from 440
+            )
+            self.input_display.grid(column=0, row=2, sticky=(ttk.W, ttk.E), pady=15)
+            
+            self.message_display = ttk.Label(
+                frame,
+                text='',
+                style='Status.TLabel',
+                wraplength=700  # Increased from 440
+            )
+            self.message_display.grid(column=0, row=3, sticky=(ttk.W, ttk.E))
 
-            # Bind the Enter key to the submit function
-            self.entry.bind("<Return>", lambda event: self.execute_user_request())
-            self.entry.bind("<KP_Enter>", lambda event: self.execute_user_request())
+            # Control buttons with more spacing
+            button_frame = ttk.Frame(frame)
+            button_frame.grid(column=0, row=4, sticky=(ttk.E), pady=30)  # Increased spacing
+            
+            settings_button = ttk.Button(
+                button_frame,
+                text='Settings',
+                style='Custom.TButton',
+                bootstyle="info-outline",
+                command=self.open_settings
+            )
+            settings_button.pack(side='left', padx=8)  # Increased spacing
+            
+            stop_button = ttk.Button(
+                button_frame,
+                text='Stop',
+                style='Custom.TButton',
+                bootstyle="danger-outline",
+                command=self.stop_previous_request
+            )
+            stop_button.pack(side='left', padx=8)  # Increased spacing
 
-            # Submit Button
-            button = ttk.Button(frame, text='Submit', bootstyle="success", command=self.execute_user_request)
-            button.grid(column=2, row=2)
-
-            # Mic Button
-            mic_button = ttk.Button(frame, image=self.mic_icon, bootstyle="link", command=self.start_voice_input_thread)
-            mic_button.grid(column=1, row=2, padx=(0, 5))
-
-            # Settings Button
-            settings_button = ttk.Button(self, text='Settings', bootstyle="info-outline", command=self.open_settings)
-            settings_button.place(relx=1.0, rely=0.0, anchor='ne', x=-5, y=5)
-
-            # Stop Button
-            stop_button = ttk.Button(self, text='Stop', bootstyle="danger-outline", command=self.stop_previous_request)
-            stop_button.place(relx=1.0, rely=1.0, anchor='se', x=-10, y=-10)
-
-            # Text display for echoed input
-            self.input_display = ttk.Label(frame, text='', font=('Helvetica', 16), wraplength=400)
-            self.input_display.grid(column=0, row=3, columnspan=3, sticky=ttk.W)
-
-            # Text display for additional messages
-            self.message_display = ttk.Label(frame, text='', font=('Helvetica', 14), wraplength=400)
-            self.message_display.grid(column=0, row=6, columnspan=3, sticky=ttk.W)
+            # Bind keyboard shortcuts
+            self.entry.bind("<Return>", lambda e: self.execute_user_request())
+            self.entry.bind("<KP_Enter>", lambda e: self.execute_user_request())
+            self.entry.focus_set()  # Set focus to entry by default
 
         def open_settings(self) -> None:
             UI.SettingsWindow(self)
@@ -334,7 +410,10 @@ class UI:
                 return
 
             self.update_message('Fetching Instructions')
-
+            
+            # Remove focus from entry field
+            self.focus_set()  # This will set focus to the main window instead
+            
             self.user_request_queue.put(user_request)
 
         def start_voice_input_thread(self) -> None:
@@ -345,22 +424,23 @@ class UI:
             # Function to handle voice input
             recognizer = sr.Recognizer()
             with sr.Microphone() as source:
-                self.update_message('Listening...')
+                self.update_message('Đang lắng nghe...')  # "Listening..." in Vietnamese
                 # This might also help with asking for mic permissions on Macs
                 recognizer.adjust_for_ambient_noise(source)
                 try:
                     audio = recognizer.listen(source, timeout=4)
                     try:
-                        text = recognizer.recognize_google(audio)
+                        # Added language code 'vi-VN' for Vietnamese
+                        text = recognizer.recognize_google(audio, language='vi-VN')
                         self.entry.delete(0, ttk.END)
                         self.entry.insert(0, text)
                         self.update_message('')
                     except sr.UnknownValueError:
-                        self.update_message('Could not understand audio')
+                        self.update_message('Không thể nhận dạng giọng nói')  # "Could not understand audio" in Vietnamese
                     except sr.RequestError as e:
-                        self.update_message(f'Could not request results - {e}')
+                        self.update_message(f'Lỗi kết nối - {e}')  # "Connection error" in Vietnamese
                 except sr.WaitTimeoutError:
-                    self.update_message('Didn\'t hear anything')
+                    self.update_message('Không nghe thấy gì')  # "Didn't hear anything" in Vietnamese
 
         def update_message(self, message: str) -> None:
             # Update the message display with the provided text.
