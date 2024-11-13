@@ -15,22 +15,22 @@ Jarjit
 <div align="center">
 <h4>Self-Driving Software for All Your Computers</h4>
 
-  [![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/AmberSahdev/Jarjit?tab=readme-ov-file#install)
-  [![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/AmberSahdev/Jarjit?tab=readme-ov-file#install)
-  [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/AmberSahdev/Jarjit?tab=readme-ov-file#install)
+  [![macOS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/zaikaman/Jarjit?tab=readme-ov-file#install)
+  [![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/zaikaman/Jarjit?tab=readme-ov-file#install)
+  [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/zaikaman/Jarjit?tab=readme-ov-file#install)
   <br>
-  [![Github All Releases](https://img.shields.io/github/downloads/AmberSahdev/Jarjit/total.svg)]((https://github.com/AmberSahdev/Jarjit/releases/latest))
-  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/AmberSahdev/Jarjit)
-  ![GitHub Repo stars](https://img.shields.io/github/stars/AmberSahdev/Jarjit)
-  ![GitHub](https://img.shields.io/github/license/AmberSahdev/Jarjit) 
-  [![GitHub Latest Release)](https://img.shields.io/github/v/release/AmberSahdev/Jarjit)](https://github.com/AmberSahdev/Jarjit/releases/latest)
+  [![Github All Releases](https://img.shields.io/github/downloads/zaikaman/Jarjit/total.svg)]((https://github.com/zaikaman/Jarjit/releases/latest))
+  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/zaikaman/Jarjit)
+  ![GitHub Repo stars](https://img.shields.io/github/stars/zaikaman/Jarjit)
+  ![GitHub](https://img.shields.io/github/license/zaikaman/Jarjit) 
+  [![GitHub Latest Release)](https://img.shields.io/github/v/release/zaikaman/Jarjit)](https://github.com/zaikaman/Jarjit/releases/latest)
 
 </div>
 
 ### <ins>Demo</ins> 💻
 ["Make me a meal plan in Google Docs"]<br>
 ![Make Meal Plan Demo](assets/meal_plan_demo_2x.gif)<br>
-[More Demos](https://github.com/AmberSahdev/Jarjit/blob/main/MEDIA.md#demos)
+[More Demos](https://github.com/zaikaman/Jarjit/blob/main/MEDIA.md#demos)
 
 
 
@@ -40,7 +40,7 @@ Jarjit
 <details>
     <summary><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Apple_Computer_Logo_rainbow.svg/640px-Apple_Computer_Logo_rainbow.svg.png" alt="MacOS Logo" width="13" height="15"> <b>MacOS</b></summary>
     <ul>
-        <li>Download the MacOS binary from the latest <a href="https://github.com/AmberSahdev/Jarjit/releases/latest">release</a>.</li>
+        <li>Download the MacOS binary from the latest <a href="https://github.com/zaikaman/Jarjit/releases/latest">release</a>.</li>
         <li>Unzip the file and move Jarjit to the Applications Folder.<br><br> 
             <img src="assets/macos_unzip_move_to_applications.png" width="350" style="border-radius: 10px;
     border: 3px solid black;">
@@ -97,35 +97,39 @@ Jarjit
     <summary><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/TuxFlat.svg/640px-TuxFlat.svg.png" alt="Linux Logo" width="15" height="15"> <b>Linux</b></summary>
     <ul>
         <li>Linux binary has been tested on Ubuntu 20.04 so far.</li>
-        <li>Download the Linux zip file from the latest <a href="https://github.com/AmberSahdev/Jarjit/releases/latest">release</a>.</li>
+        <li>Download the Linux zip file from the latest <a href="https://github.com/zaikaman/Jarjit/releases/latest">release</a>.</li>
         <li>
             Extract the executable and run it from the Terminal via <br>
             <code>./Jarjit</code>
         </li>
-	<li>Checkout the <a href="https://github.com/AmberSahdev/Jarjit?tab=readme-ov-file#setup">Setup</a> section to connect Jarjit to LLMs (OpenAI GPT-4V)</li>
+	<li>Checkout the <a href="https://github.com/zaikaman/Jarjit?tab=readme-ov-file#setup">Setup</a> section to connect Jarjit to LLMs (OpenAI GPT-4V)</li>
     </ul>
 </details>
 <details>
     <summary><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Linux Logo" width="15" height="15"> <b>Windows</b></summary>
     <ul>
 	<li>Windows binary has been tested on Windows 10.</li>
-	<li>Download the Windows zip file from the latest <a href="https://github.com/AmberSahdev/Jarjit/releases/latest">release</a>.</li>
+	<li>Download the Windows zip file from the latest <a href="https://github.com/zaikaman/Jarjit/releases/latest">release</a>.</li>
 	<li>Unzip the folder, move the exe to the desired location, double click to open, and voila.</li>
-	<li>Checkout the <a href="https://github.com/AmberSahdev/Jarjit?tab=readme-ov-file#setup">Setup</a> section to connect Jarjit to LLMs (OpenAI GPT-4V)</li>
+	<li>Checkout the <a href="https://github.com/zaikaman/Jarjit?tab=readme-ov-file#setup">Setup</a> section to connect Jarjit to LLMs (OpenAI GPT-4V)</li>
     </ul>
 </details>
 
 
 ### <ins id="setup">Setup</ins> 🛠️
 <details>
-    <summary><b>Set up the OpenAI API key</b></summary>
+    <summary><b>Set up the GitHub API key</b></summary>
 
-- Get your OpenAI API key
-  - Jarjit needs access to GPT-4V to perform user requests. GPT-4V keys can be downloaded from your [OpenAI account](https://platform.openai.com/).
-  - [Follow the steps here](https://help.openai.com/en/articles/8264644-what-is-prepaid-billing) to add balance to your OpenAI account. To unlock GPT-4V a minimum payment of $5 is needed.
-  - [More info](https://help.openai.com/en/articles/7102672-how-can-i-access-gpt-4)
-- Save the API key in jarjit settings
-  - In Jarjit, go to the Settings menu on the top right and enter the key you received from OpenAI into the text field like so: <br>
+- Get your GitHub API key
+  - Jarjit needs access to GitHub's API to perform user requests. 
+  - Go to your [GitHub Settings](https://github.com/settings/tokens) and generate a new Personal Access Token
+  - Select the "Generate new token (classic)" option
+  - Give it a name (e.g., "Jarjit Access Token")
+  - For scopes, you only need `read:user` and `user:email`
+  - Copy the generated token immediately as you won't be able to see it again
+
+- Save the API key in Jarjit settings
+  - In Jarjit, go to the Settings menu on the top right and enter the token you received from GitHub into the text field like so: <br>
   <br>
   <picture>
 	<img src="assets/set_openai_api_key.png" align="middle" alt="Set API key in settings" width="400">
@@ -137,16 +141,17 @@ Jarjit
 </details>
 
 <details>
-    <summary><b>Optional: Setup a Custom LLM</b></summary>
+    <summary><b>Optional: Setup Multiple API Keys</b></summary>
 
-- Jarjit supports using other OpenAI API style LLMs (such as Llava) as a backend and can be configured easily in the Advanced Settings window.
-- Enter the custom base url and model name in the Advanced Settings window and the API key in the Settings window as needed.
-  <br>
-  <picture>
-	<img src="assets/advanced_settings.png" align="middle" alt="Set API key in settings" width="400">
-  </picture><br>
-  <br>
-- If your LLM does not support an OpenAI style API, you can use a library like [this](https://github.com/BerriAI/litellm) to convert it to one.
+- Jarjit supports using multiple GitHub API keys to handle rate limiting
+- You can add multiple keys in the `api_keys.json` file in the following format:
+  ```json
+  [
+    "your-github-token-1",
+    "your-github-token-2"
+  ]
+  ```
+- The app will automatically rotate between keys if rate limits are hit
 - You will need to restart the app after these changes.
 
 </details>
@@ -168,8 +173,7 @@ Jarjit
 - "Take the pictures from my Tahoe trip and make a White Lotus type montage in iMovie."
 
 ### <ins>Notes</ins> 📝
-- Cost: $0.05 - $0.20 per user request.<br>
-(This will be much lower in the near future once GPT-4V enables assistant/stateful mode)
+- Cost: Free! Uses GitHub's API with generous rate limits
 - You can interrupt the app anytime by pressing the Stop button, or by dragging your cursor to any of the screen corners.
 - Jarjit can only see your primary display when using multiple monitors. Therefore, if the cursor/focus is on a secondary screen, it might keep retrying the same actions as it is unable to see its progress (especially in MacOS with launching Spotlight).
 
