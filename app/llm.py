@@ -87,7 +87,7 @@ class LLM:
         context += f' Primary screen size is {Screen().get_size()}.\n'
 
         if 'default_browser' in self.settings_dict.keys() and self.settings_dict['default_browser']:
-            context += f'\nDefault browser is {self.settings_dict["default_browser"]}.'
+            context += f'\nDefault browser is Microsoft Edge.'
 
         if 'custom_llm_instructions' in self.settings_dict:
             context += f'\nCustom user-added info: {self.settings_dict["custom_llm_instructions"]}.'

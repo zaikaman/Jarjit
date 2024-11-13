@@ -5,7 +5,7 @@ from pathlib import Path
 
 import speech_recognition as sr
 import ttkbootstrap as ttk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageFilter, ImageEnhance
 
 from llm import DEFAULT_MODEL_NAME
 from utils.settings import Settings
@@ -144,7 +144,7 @@ class UI:
             # Dropdown for Browser Choice
             self.browser_var = ttk.StringVar()
             self.browser_combobox = ttk.Combobox(self, textvariable=self.browser_var,
-                                                 values=['Safari', 'Firefox', 'Chrome'])
+                                                 values=['Safari', 'Firefox', 'Chrome', 'Microsoft Edge'])
             self.browser_combobox.pack(pady=5)
             self.browser_combobox.set('Choose Browser')
 
@@ -225,49 +225,34 @@ class UI:
 
     class MainWindow(ttk.Window):
         def __init__(self):
-            # Initialize with default theme
-            super().__init__(themename="superhero")
+            # Initialize với theme tối màu
+            super().__init__(themename="darkly")  # Thay đổi theme sang tối
             
             # Load settings
             settings = Settings()
             settings_dict = settings.get_dict()
-            self._current_theme = settings_dict.get('theme', 'superhero')
+            self._current_theme = settings_dict.get('theme', 'darkly')
             
-            # Set window properties
-            self.title('Jarjit')
+            # Set window properties với background trong suốt
+            self.title('J.A.R.J.I.T')  # Thêm dấu chấm để giống AI
+            self.attributes('-alpha', 0.95)  # Làm trong suốt nhẹ
             
-            # Increased window dimensions
-            window_width = 900  # Increased from 480
-            window_height = 600  # Increased from 320
-            self.minsize(window_width, window_height)
-            
-            # Center window on screen
-            screen_width = self.winfo_screenwidth()
-            screen_height = self.winfo_screenheight()
-            x_position = (screen_width - window_width) // 2
-            y_position = (screen_height - window_height) // 2
-            self.geometry(f'{window_width}x{window_height}+{x_position}+{y_position}')
+            # Tạo gradient background
+            self.configure(bg='#1a1a2e')  # Deep blue background
 
-            # Configure styles using local variable
+            # Custom styles
             style = ttk.Style()
-            style.theme_use(self._current_theme)
-            
-            # Configure custom styles with larger fonts
             style.configure('Custom.TEntry', 
-                padding=12,  # Increased padding
-                font=('Helvetica', 14)  # Larger font
+                padding=12,
+                font=('Consolas', 14),  # Font monospace
+                background='#0f3460',  # Deep blue
+                foreground='#00ff00'  # Matrix green
             )
-            style.configure('Custom.TButton',
-                padding=10,  # Increased padding
-                font=('Helvetica', 13, 'bold')  # Larger font
-            )
+            
             style.configure('Title.TLabel',
-                font=('Helvetica', 28, 'bold'),  # Larger font
-                padding=20  # Increased padding
-            )
-            style.configure('Status.TLabel',
-                font=('Helvetica', 13),  # Larger font
-                padding=8  # Increased padding
+                font=('Orbitron', 28, 'bold'),  # Futuristic font
+                foreground='#16c79a',  # Cyber mint
+                padding=20
             )
 
             # Load resources with larger icons
@@ -285,6 +270,24 @@ class UI:
             # Create widgets
             self.create_widgets()
 
+            # Thêm vào phần __init__ hiện có
+            self.thinking_animation = None
+            self.dots_count = 0
+
+            # Thêm styles cho thinking animation
+            style.configure('Processing.TLabel',
+                font=('Consolas', 14),  # Font monospace cho hiệu ứng máy tính
+                foreground='#16c79a',  # Màu cyber mint
+                background='#1a1a2e'  # Match với background
+            )
+            
+            # Thêm styles cho message display
+            style.configure('Message.TLabel', 
+                font=('Consolas', 14),
+                foreground='#e2e2e2',  # Màu sáng cho text thường
+                background='#1a1a2e'
+            )
+
         def change_theme(self, theme: str) -> None:
             """Change the application theme"""
             if theme != self._current_theme:
@@ -293,6 +296,18 @@ class UI:
                 self._current_theme = theme
 
         def create_widgets(self) -> None:
+            # Tạo circular frame cho logo
+            self.logo_frame = ttk.Frame(self, style='Logo.TFrame')
+            self.logo_frame.place(relx=0.1, rely=0.1)
+            
+            # Load và resize logo với glow effect
+            self.logo_img = self.create_glowing_logo()
+            self.logo_label = ttk.Label(self.logo_frame, image=self.logo_img)
+            self.logo_label.pack()
+            
+            # Start pulse animation
+            self.animate_logo()
+
             # Main container with more padding
             frame = ttk.Frame(self, padding='30 30 30 30')  # Increased padding
             frame.grid(column=0, row=0, sticky=(ttk.W, ttk.E, ttk.N, ttk.S))
@@ -403,16 +418,16 @@ class UI:
             return user_input.strip()
 
         def execute_user_request(self) -> None:
-            # Puts the user request received from the UI into the MP queue being read in App to be sent to Core.
             user_request = self.display_input()
 
             if user_request == '' or user_request is None:
                 return
 
-            self.update_message('Fetching Instructions')
+            # Bắt đầu animation
+            self.start_thinking_animation()
             
-            # Remove focus from entry field
-            self.focus_set()  # This will set focus to the main window instead
+            # Remove focus from entry field 
+            self.focus_set()
             
             self.user_request_queue.put(user_request)
 
@@ -443,9 +458,116 @@ class UI:
                     self.update_message('Không nghe thấy gì')  # "Didn't hear anything" in Vietnamese
 
         def update_message(self, message: str) -> None:
-            # Update the message display with the provided text.
-            # Ensure thread safety when updating the Tkinter GUI.
+            # Dừng animation nếu đang chạy
+            self.stop_thinking_animation()
+            
+            # Update message với style thường
             if threading.current_thread() is threading.main_thread():
-                self.message_display['text'] = message
+                self.message_display.configure(
+                    text=message,
+                    style='Message.TLabel'
+                )
             else:
-                self.message_display.after(0, lambda: self.message_display.config(text=message))
+                self.message_display.after(0, lambda: self.message_display.configure(
+                    text=message,
+                    style='Message.TLabel'
+                ))
+
+        def animate_thinking(self):
+            if self.thinking_animation:
+                self.dots_count = (self.dots_count + 1) % 4
+                dots = "." * self.dots_count
+                
+                # Tạo hiệu ứng nhấp nháy với ký tự đặc biệt
+                frames = [
+                    "▌ Processing" + dots,  # Frame 1
+                    "▐ Processing" + dots,  # Frame 2
+                ]
+                
+                current_frame = frames[self.dots_count % 2]
+                
+                # Cập nhật label với style riêng
+                self.message_display.configure(
+                    text=current_frame,
+                    style='Processing.TLabel'
+                )
+                
+                # Tốc độ animation nhanh hơn
+                self.thinking_animation = self.after(200, self.animate_thinking)
+
+        def start_thinking_animation(self):
+            self.dots_count = 0
+            self.thinking_animation = self.after(0, self.animate_thinking)
+            
+        def stop_thinking_animation(self):
+            if self.thinking_animation:
+                self.after_cancel(self.thinking_animation)
+                self.thinking_animation = None
+
+        def create_glowing_logo(self):
+            # Load original image
+            path_to_icon = Path(__file__).resolve().parent.joinpath('resources', 'icon.png')
+            original = Image.open(path_to_icon).resize((80, 80))
+            
+            # Add glow effect
+            glow = original.filter(ImageFilter.GaussianBlur(radius=5))
+            glow = ImageEnhance.Brightness(glow).enhance(1.5)
+            
+            # Combine original and glow
+            result = Image.new('RGBA', glow.size, (0, 0, 0, 0))
+            result.paste(glow, (0, 0))
+            result.paste(original, (0, 0), original)
+            
+            return ImageTk.PhotoImage(result)
+
+        def animate_logo(self):
+            # Pulse animation
+            def pulse():
+                scale = 1.0
+                def _pulse():
+                    nonlocal scale
+                    scale += 0.05 if scale < 1.1 else -0.05
+                    if scale < 1.0: scale = 1.0
+                    
+                    self.logo_label.configure(image=self.create_glowing_logo())
+                    self.after(50, _pulse)
+                _pulse()
+            pulse()
+
+        def create_title(self):
+            self.title_label = ttk.Label(
+                self, 
+                text="",
+                style='Title.TLabel'
+            )
+            self.title_label.pack(pady=20)
+            
+            # Typing animation
+            self.type_text("What would you like me to do?", self.title_label)
+
+        def type_text(self, text, label, delay=100):
+            def _type(index=0):
+                if index < len(text):
+                    current = label.cget("text") + text[index]
+                    label.configure(text=current)
+                    self.after(delay, lambda: _type(index + 1))
+            _type()
+
+        def create_ripple(self, event):
+            # Create ripple effect on click
+            x = event.x_root - self.winfo_rootx()
+            y = event.y_root - self.winfo_rooty()
+            
+            ripple = ttk.Label(self, text="", style="Ripple.TLabel")
+            ripple.place(x=x, y=y)
+            
+            def _animate_ripple(size=0, opacity=1.0):
+                if size < 100:  # Max ripple size
+                    ripple.configure(width=size, height=size)
+                    ripple.place(x=x-size//2, y=y-size//2)
+                    
+                    self.after(10, lambda: _animate_ripple(size+4, opacity-0.02))
+                else:
+                    ripple.destroy()
+                    
+            _animate_ripple()
