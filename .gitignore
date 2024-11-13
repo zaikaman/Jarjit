@@ -1,0 +1,31 @@
+# Misc
+.DS_Store
+*.mov
+env_variables.yaml
+*/secret.py
+secrets/
+
+# Python
+*.pyc
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtualenv
+env/
+venv/
+venvName/
+
+# DB
+instance/
+
+# Build files
+dist/
+build/
+*.egg-info/
+.eggs/
+*.spec
+
+# IDE
+.idea/
