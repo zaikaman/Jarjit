@@ -141,9 +141,9 @@ class LLM:
         self.context += f" Locally installed apps are {','.join(local_info.locally_installed_apps)}."
         self.context += f" Primary screen size is {Screen().get_size()}.\n"
         self.assistant = self.client.beta.assistants.create(
-            name="Open Interface Backend",
+            name="Jarjit Backend",
             instructions=self.context,
-            model="gpt-4o",
+            model="github-llm",
         )
         self.thread = self.client.beta.threads.create()
     def get_instructions_for_objective(self, original_user_request, step_num=0):

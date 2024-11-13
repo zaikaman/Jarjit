@@ -7,7 +7,7 @@
 ### Full Autopilot for All Computers Using LLMs
 
 Jarjit
-- Self-drives computers by sending user requests to an LLM backend (GPT-4V, etc) to figure out the required steps.
+- Self-drives computers by sending user requests to an LLM backend (GPT-4o, etc) to figure out the required steps.
 - Automatically executes the steps by simulating keyboard and mouse input.
 - Course-corrects by sending the LLMs a current screenshot of the computer as needed. 
 
@@ -37,124 +37,117 @@ Jarjit
 <hr>
 
 ### <ins>Install</ins> 💽
+
+<details>
+    <summary><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Windows Logo" width="15" height="15"> <b>Windows</b></summary>
+    <ul>
+        <li><b>Step 1:</b> Download and Install Python
+            <ul>
+                <li>Download <a href="https://www.python.org/downloads/">Python 3.10 or higher</a></li>
+                <li>During installation, make sure to check "Add Python to PATH"</li>
+            </ul>
+        </li>
+        <li><b>Step 2:</b> Download Jarjit
+            <ul>
+                <li>Clone this repository: <code>git clone https://github.com/zaikaman/Jarjit.git</code></li>
+                <li>Or <a href="https://github.com/zaikaman/Jarjit/archive/refs/heads/main.zip">download the ZIP file</a> and extract it</li>
+            </ul>
+        </li>
+        <li><b>Step 3:</b> Install Dependencies
+            <ul>
+                <li>Open Command Prompt in the Jarjit folder</li>
+                <li>Run: <code>pip install -r requirements.txt</code></li>
+            </ul>
+        </li>
+        <li><b>Step 4:</b> Run Jarjit
+            <ul>
+                <li>In the same Command Prompt, run: <code>python app/app.py</code></li>
+            </ul>
+        </li>
+    </ul>
+</details>
+
 <details>
     <summary><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Apple_Computer_Logo_rainbow.svg/640px-Apple_Computer_Logo_rainbow.svg.png" alt="MacOS Logo" width="13" height="15"> <b>MacOS</b></summary>
     <ul>
-        <li>Download the MacOS binary from the latest <a href="https://github.com/zaikaman/Jarjit/releases/latest">release</a>.</li>
-        <li>Unzip the file and move Jarjit to the Applications Folder.<br><br> 
-            <img src="assets/macos_unzip_move_to_applications.png" width="350" style="border-radius: 10px;
-    border: 3px solid black;">
+        <li><b>Step 1:</b> Install Prerequisites
+            <ul>
+                <li>Install <a href="https://brew.sh/">Homebrew</a> if you haven't already:
+                    <br><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></li>
+                <li>Install Python: <code>brew install python@3.10</code></li>
+            </ul>
         </li>
-    </ul>
-  <details>
-    <summary><b>Apple Silicon M-Series Macs</b></summary>
-    <ul>
-      <li>
-        jarjit will ask you for Accessibility access to operate your keyboard and mouse for you, and Screen Recording access to take screenshots to assess its progress.<br>
-      </li>
-      <li>
-        In case it doesn't, manually add these permission via <b>System Settings</b> -> <b>Privacy and Security</b>
-        <br>
-        <img src="assets/mac_m3_accessibility.png" width="400" style="margin: 5px; border-radius: 10px;
-    border: 3px solid black;"><br>
-        <img src="assets/mac_m3_screenrecording.png" width="400" style="margin: 5px; border-radius: 10px;
-    border: 3px solid black;">
-      </li>
-    </ul>
-  </details>
-  <details>
-    <summary><b>Intel Macs</b></summary>
-    <ul>
-        <li>
-            Launch the app from the Applications folder.<br>
-            You might face the standard Mac <i>"Jarjit cannot be opened" error</i>.<br><br>
-            <img src="assets/macos_unverified_developer.png" width="200" style="border-radius: 10px;
-    border: 3px solid black;"><br>
-            In that case, press <b><i><ins>"Cancel"</ins></i></b>.<br>
-            Then go to <b>System Preferences -> Security and Privacy -> Open Anyway.</b><br><br>
-            <img src="assets/macos_system_preferences.png" width="100" style="border-radius: 10px;
-    border: 3px solid black;"> &nbsp; 
-            <img src="assets/macos_security.png" width="100" style="border-radius: 10px;
-    border: 3px solid black;"> &nbsp;
-            <img src="assets/macos_open_anyway.png" width="400" style="border-radius: 10px;
-    border: 3px solid black;"> 
+        <li><b>Step 2:</b> Download Jarjit
+            <ul>
+                <li>Clone repository: <code>git clone https://github.com/zaikaman/Jarjit.git</code></li>
+                <li>Or download and extract the <a href="https://github.com/zaikaman/Jarjit/archive/refs/heads/main.zip">ZIP file</a></li>
+            </ul>
         </li>
-        <br>
-        <li>
-        Jarjit will also need Accessibility access to operate your keyboard and mouse for you, and Screen Recording access to take screenshots to assess its progress.<br><br>
-        <img src="assets/macos_accessibility.png" width="400" style="margin: 5px; border-radius: 10px;
-    border: 3px solid black;"><br>
-        <img src="assets/macos_screen_recording.png" width="400" style="margin: 5px; border-radius: 10px;
-    border: 3px solid black;">
+        <li><b>Step 3:</b> Install Dependencies
+            <ul>
+                <li>Open Terminal in the Jarjit folder</li>
+                <li>Run: <code>pip3 install -r requirements.txt</code></li>
+            </ul>
         </li>
-      </ul>
-</details>
-      <ul>
-        <li>Lastly, checkout the <a href="#setup">Setup</a> section to connect jarjit to LLMs (OpenAI GPT-4V)</li>
+        <li><b>Step 4:</b> Run Jarjit
+            <ul>
+                <li>In Terminal: <code>python3 app/app.py</code></li>
+            </ul>
+        </li>
+        <li><b>Step 5:</b> Grant Permissions
+            <ul>
+                <li>When prompted, grant Accessibility and Screen Recording permissions in System Settings → Privacy & Security</li>
+            </ul>
+        </li>
     </ul>
 </details>
+
 <details>
     <summary><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/TuxFlat.svg/640px-TuxFlat.svg.png" alt="Linux Logo" width="15" height="15"> <b>Linux</b></summary>
     <ul>
-        <li>Linux binary has been tested on Ubuntu 20.04 so far.</li>
-        <li>Download the Linux zip file from the latest <a href="https://github.com/zaikaman/Jarjit/releases/latest">release</a>.</li>
-        <li>
-            Extract the executable and run it from the Terminal via <br>
-            <code>./Jarjit</code>
+        <li><b>Step 1:</b> Install Prerequisites
+            <ul>
+                <li>Ubuntu/Debian: <code>sudo apt-get update && sudo apt-get install python3 python3-pip git</code></li>
+                <li>Fedora: <code>sudo dnf install python3 python3-pip git</code></li>
+            </ul>
         </li>
-	<li>Checkout the <a href="https://github.com/zaikaman/Jarjit?tab=readme-ov-file#setup">Setup</a> section to connect Jarjit to LLMs (OpenAI GPT-4V)</li>
+        <li><b>Step 2:</b> Download Jarjit
+            <ul>
+                <li>Clone repository: <code>git clone https://github.com/zaikaman/Jarjit.git</code></li>
+                <li>Or download and extract: <code>wget https://github.com/zaikaman/Jarjit/archive/refs/heads/main.zip && unzip main.zip</code></li>
+            </ul>
+        </li>
+        <li><b>Step 3:</b> Install Dependencies
+            <ul>
+                <li><code>cd Jarjit</code></li>
+                <li><code>pip3 install -r requirements.txt</code></li>
+            </ul>
+        </li>
+        <li><b>Step 4:</b> Run Jarjit
+            <ul>
+                <li><code>python3 app/app.py</code></li>
+            </ul>
+        </li>
     </ul>
 </details>
-<details>
-    <summary><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Linux Logo" width="15" height="15"> <b>Windows</b></summary>
-    <ul>
-	<li>Windows binary has been tested on Windows 10.</li>
-	<li>Download the Windows zip file from the latest <a href="https://github.com/zaikaman/Jarjit/releases/latest">release</a>.</li>
-	<li>Unzip the folder, move the exe to the desired location, double click to open, and voila.</li>
-	<li>Checkout the <a href="https://github.com/zaikaman/Jarjit?tab=readme-ov-file#setup">Setup</a> section to connect Jarjit to LLMs (OpenAI GPT-4V)</li>
-    </ul>
-</details>
 
+### <ins>Setup</ins> 🛠️
+After installation, you'll need to set up your GitHub API key:
 
-### <ins id="setup">Setup</ins> 🛠️
-<details>
-    <summary><b>Set up the GitHub API key</b></summary>
+1. Generate a GitHub Personal Access Token:
+   - Go to [GitHub Settings → Developer Settings → Personal Access Tokens](https://github.com/settings/tokens)
+   - Click "Generate new token (classic)"
+   - Name it "Jarjit Access Token"
+   - Select scopes: `read:user` and `user:email`
+   - Copy the generated token
 
-- Get your GitHub API key
-  - Jarjit needs access to GitHub's API to perform user requests. 
-  - Go to your [GitHub Settings](https://github.com/settings/tokens) and generate a new Personal Access Token
-  - Select the "Generate new token (classic)" option
-  - Give it a name (e.g., "Jarjit Access Token")
-  - For scopes, you only need `read:user` and `user:email`
-  - Copy the generated token immediately as you won't be able to see it again
+2. Configure Jarjit:
+   - Launch Jarjit
+   - Click Settings in the top right
+   - Paste your GitHub token
+   - Click Save and restart Jarjit
 
-- Save the API key in Jarjit settings
-  - In Jarjit, go to the Settings menu on the top right and enter the token you received from GitHub into the text field like so: <br>
-  <br>
-  <picture>
-	<img src="assets/set_openai_api_key.png" align="middle" alt="Set API key in settings" width="400">
-  </picture><br>
-  <br>
-
-- After setting the API key for the first time you'll need to restart the app.
-
-</details>
-
-<details>
-    <summary><b>Optional: Setup Multiple API Keys</b></summary>
-
-- Jarjit supports using multiple GitHub API keys to handle rate limiting
-- You can add multiple keys in the `api_keys.json` file in the following format:
-  ```json
-  [
-    "your-github-token-1",
-    "your-github-token-2"
-  ]
-  ```
-- The app will automatically rotate between keys if rate limits are hit
-- You will need to restart the app after these changes.
-
-</details>
+Optional: To handle rate limits, you can add multiple tokens in `app/resources/api_keys.json`:
 
 <hr>
 

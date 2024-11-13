@@ -9,7 +9,6 @@ h11==0.14.0
 httpcore==1.0.2
 httpx==0.26.0
 idna==3.7
-macholib==1.16.3
 MouseInfo==0.1.3
 openai==1.36.1
 packaging==24.2
@@ -22,15 +21,11 @@ PyGetWindow==0.0.9
 pyinstaller==6.11.0
 pyinstaller-hooks-contrib==2024.9
 PyMsgBox==1.0.9
-pyobjc-core==10.1
-pyobjc-framework-Cocoa==10.1
-pyobjc-framework-Quartz==10.1
 pyperclip==1.8.2
 PyRect==0.2.0
 PyScreeze==0.1.30
 pytweening==1.0.7
 requests==2.32.0
-rubicon-objc==0.4.7
 setuptools==75.3.0
 sniffio==1.3.0
 SpeechRecognition==3.10.3
