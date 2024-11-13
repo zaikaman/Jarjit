@@ -51,14 +51,19 @@ class LLM:
 
     def __init__(self):
         self.settings_dict: dict[str, str] = Settings().get_dict()
-        model_name, base_url, api_key = self.get_settings_values()
-
+        model_name, base_url = self.get_settings_values()
+        
         self.model_name = model_name
         context = self.read_context_txt_file()
+        
+        self.model = ModelFactory.create_model(
+            self.model_name, 
+            base_url,
+            'resources/api_keys.json',  # Path to API keys file
+            context
+        )
 
-        self.model = ModelFactory.create_model(self.model_name, base_url, api_key, context)
-
-    def get_settings_values(self) -> tuple[str, str, str]:
+    def get_settings_values(self) -> tuple[str, str]:
         model_name = self.settings_dict.get('model')
         if not model_name:
             model_name = 'gpt-4o'
@@ -68,9 +73,7 @@ class LLM:
             base_url = 'https://models.inference.ai.azure.com'
         base_url = base_url.rstrip('/') + '/'
 
-        api_key = self.settings_dict.get('github_token')
-
-        return model_name, base_url, api_key
+        return model_name, base_url
 
     def read_context_txt_file(self) -> str:
         # Construct context for the assistant by reading context.txt and adding extra system information

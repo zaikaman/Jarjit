@@ -35,17 +35,27 @@ class GPT4v(Model):
         return message
 
     def send_message_to_llm(self, message) -> ChatCompletion:
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=[
-                {
-                    'role': 'user',
-                    'content': message,
-                }
-            ],
-            max_tokens=800,
-        )
-        return response
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model_name,
+                messages=[
+                    {
+                        'role': 'user',
+                        'content': message,
+                    }
+                ],
+                max_tokens=800,
+            )
+            return response
+        except Exception as e:
+            if 'RateLimitReached' in str(e):
+                # Mark current key as rate limited
+                self.api_key_manager.mark_key_rate_limited(self.client.api_key)
+                # Try to get a new key and update client
+                self.update_client()
+                # Retry the request once
+                return self.send_message_to_llm(message)
+            raise
 
     def convert_llm_response_to_json_instructions(self, llm_response: ChatCompletion) -> dict[str, Any]:
         llm_response_data: str = llm_response.choices[0].message.content.strip()
