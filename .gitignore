@@ -29,3 +29,6 @@ build/
 
 # IDE
 .idea/
+
+# Ignore API keys file
+app/resources/api_keys.json

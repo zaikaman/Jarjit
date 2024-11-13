@@ -186,13 +186,13 @@ class UI:
             link_label = ttk.Label(self, text='Instructions', bootstyle="primary")
             link_label.pack()
             link_label.bind('<Button-1>', lambda e: open_link(
-                'https://github.com/AmberSahdev/Open-Interface?tab=readme-ov-file#setup-%EF%B8%8F'))
+                'https://github.com/AmberSahdev/Jarjit?tab=readme-ov-file#setup-%EF%B8%8F'))
 
             # Check for updates Label
             update_label = ttk.Label(self, text='Check for Updates', bootstyle="primary")
             update_label.pack()
             update_label.bind('<Button-1>', lambda e: open_link(
-                'https://github.com/AmberSahdev/Open-Interface/releases/latest'))
+                'https://github.com/AmberSahdev/Jarjit/releases/latest'))
 
             # Version Label
             version_label = ttk.Label(self, text=f'Version: {str(version)}', font=('Helvetica', 10))
@@ -233,7 +233,7 @@ class UI:
             theme = settings_dict.get('theme', 'superhero')
 
             super().__init__(themename=theme)
-            self.title('Open Interface')
+            self.title('Jarjit')
             window_width = 420
             window_height = 250
             self.minsize(window_width, window_height)
