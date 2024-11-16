@@ -70,7 +70,7 @@ class App:
 
 
 if __name__ == '__main__':
-    freeze_support()  # As required by pyinstaller https://www.pyinstaller.org/en/stable/common-issues-and-pitfalls.html#multi-processing
+    freeze_support()
     app = App()
     app.run()
     app.cleanup()
