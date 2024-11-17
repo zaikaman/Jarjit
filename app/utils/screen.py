@@ -45,3 +45,21 @@ class Screen:
         img = self.get_screenshot()
         img.save(filepath)
         return filepath
+
+    def position_window_right(self):
+        screen_width, screen_height = self.get_size()
+        window_width = int(screen_width * 0.75)  # 75% chiều rộng màn hình
+        window_x = int(screen_width * 0.25)  # Bắt đầu từ 25% chiều rộng màn hình
+        
+        # Sử dụng pyautogui để di chuyển và resize cửa sổ hiện tại
+        pyautogui.hotkey('win', 'up')  # Maximize trước
+        pyautogui.sleep(0.5)  # Đợi animation
+        pyautogui.hotkey('win', 'left')  # Snap to left
+        pyautogui.sleep(0.5)
+        
+        # Điều chỉnh kích thước
+        pyautogui.keyDown('win')
+        pyautogui.keyDown('shift')
+        pyautogui.press('right')  # Di chuyển sang phải
+        pyautogui.keyUp('shift')
+        pyautogui.keyUp('win')

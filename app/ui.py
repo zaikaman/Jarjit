@@ -6,6 +6,7 @@ from pathlib import Path
 import speech_recognition as sr
 import ttkbootstrap as ttk
 from PIL import Image, ImageTk, ImageFilter, ImageEnhance
+import pyautogui
 
 from llm import DEFAULT_MODEL_NAME
 from utils.settings import Settings
@@ -536,8 +537,9 @@ class UI:
             # Bắt đầu animation
             self.start_thinking_animation()
             
-            # Remove focus from entry field 
-            self.focus_set()
+            # Remove focus from UI window and activate last window
+            # self.iconify()  # Minimize UI window
+            pyautogui.hotkey('alt', 'tab')  # Switch to last active window
             
             self.user_request_queue.put(user_request)
 
