@@ -225,13 +225,24 @@ class UI:
 
     class MainWindow(ttk.Window):
         def __init__(self):
-            # Initialize với theme tối màu
-            super().__init__(themename="darkly")  # Thay đổi theme sang tối
+            super().__init__(themename="darkly")
             
             # Load settings
             settings = Settings()
             settings_dict = settings.get_dict()
             self._current_theme = settings_dict.get('theme', 'darkly')
+            
+            # Set window size and position
+            screen_width = self.winfo_screenwidth()
+            screen_height = self.winfo_screenheight()
+            window_width = screen_width // 4  # 1/4 of screen width
+            
+            # Set window geometry and position it on the left side
+            self.geometry(f"{window_width}x{screen_height}+0+0")
+            self.minsize(300, screen_height)  # Set minimum width
+            
+            # Prevent window resizing horizontally
+            self.resizable(False, True)
             
             # Set window properties với background trong suốt
             self.title('J.A.R.J.I.T')  # Thêm dấu chấm để giống AI
@@ -288,6 +299,54 @@ class UI:
                 background='#1a1a2e'
             )
 
+            # Cập nhật style cho giao diện hiện đại hơn
+            style = ttk.Style()
+            
+            # Style cho main window
+            self.configure(bg='#0A0A1B')  # Màu nền tối hơn
+            
+            # Style cho entry field
+            style.configure('Custom.TEntry', 
+                padding=15,
+                font=('JetBrains Mono', 12),  # Font coding đẹp hơn
+                background='#1E1E30',  # Màu nền tối hơn
+                foreground='#16c79a',  # Màu chữ mint
+                borderwidth=0,
+                relief='flat'
+            )
+            
+            # Style cho title
+            style.configure('Title.TLabel',
+                font=('Segoe UI', 24, 'bold'),  # Changed from 32 to 24
+                foreground='#16c79a',  # Màu mint
+                background='#0A0A1B',
+                padding=25
+            )
+            
+            # Style cho buttons
+            style.configure('Custom.TButton',
+                font=('Segoe UI', 10),
+                padding=10,
+                borderwidth=0
+            )
+            
+            # Style cho status labels
+            style.configure('Status.TLabel',
+                font=('JetBrains Mono', 11),
+                foreground='#B0B0B0',
+                background='#0A0A1B',
+                padding=5
+            )
+
+            # Cập nhật style cho background tối
+            style = ttk.Style()
+            style.configure('Main.TFrame', background='#0A0A1B')
+            style.configure('Top.TFrame', background='#0A0A1B')
+            
+            # Đảm bảo window lấp đầy chiều cao
+            self.grid_rowconfigure(0, weight=1)
+            self.grid_columnconfigure(0, weight=1)
+
         def change_theme(self, theme: str) -> None:
             """Change the application theme"""
             if theme != self._current_theme:
@@ -296,104 +355,155 @@ class UI:
                 self._current_theme = theme
 
         def create_widgets(self) -> None:
-            # Tạo circular frame cho logo
-            self.logo_frame = ttk.Frame(self, style='Logo.TFrame')
-            self.logo_frame.place(relx=0.1, rely=0.1)
+            # Main container chiếm toàn bộ không gian
+            frame = ttk.Frame(self, style='Main.TFrame')
+            frame.grid(column=0, row=0, sticky=(ttk.N, ttk.S, ttk.E, ttk.W))
+            frame.grid_rowconfigure(1, weight=1)  # Input section sẽ expand
+            frame.grid_columnconfigure(0, weight=1)
             
-            # Load và resize logo với glow effect
-            self.logo_img = self.create_glowing_logo()
-            self.logo_label = ttk.Label(self.logo_frame, image=self.logo_img)
-            self.logo_label.pack()
+            # Top section với logo và title
+            top_frame = ttk.Frame(frame, style='Top.TFrame')
+            top_frame.grid(column=0, row=0, sticky=(ttk.W, ttk.E), pady=(50, 30))
             
-            # Start pulse animation
-            self.animate_logo()
-
-            # Main container with more padding
-            frame = ttk.Frame(self, padding='30 30 30 30')  # Increased padding
-            frame.grid(column=0, row=0, sticky=(ttk.W, ttk.E, ttk.N, ttk.S))
-            frame.columnconfigure(0, weight=1)
-            
-            # Top section with logo and title
-            top_frame = ttk.Frame(frame)
-            top_frame.grid(column=0, row=0, sticky=(ttk.W, ttk.E), pady=(0, 30))  # Increased spacing
-            
+            # Logo
             logo_label = ttk.Label(top_frame, image=self.logo_img)
-            logo_label.pack(side='left', padx=(0, 20))  # Increased spacing
+            logo_label.pack(pady=(0, 30))
             
+            # Title
             heading_label = ttk.Label(
-                top_frame, 
+                top_frame,
                 text='What would you like me to do?',
-                style='Title.TLabel'
+                style='Title.TLabel',
+                wraplength=400,
+                justify='center'
             )
-            heading_label.pack(side='left', fill='x', expand=True)
+            heading_label.pack(fill='x', padx=20)
 
-            # Input section with larger wraplength
-            input_frame = ttk.Frame(frame)
-            input_frame.grid(column=0, row=1, sticky=(ttk.W, ttk.E), pady=15)
-            input_frame.columnconfigure(0, weight=1)
+            # Input section (expanded)
+            input_frame = ttk.Frame(frame, style='Main.TFrame')
+            input_frame.grid(column=0, row=1, sticky=(ttk.N, ttk.S, ttk.E, ttk.W), padx=30)
+            input_frame.grid_rowconfigure(1, weight=1)  # Status area will expand
+            input_frame.grid_columnconfigure(0, weight=1)
 
+            # Entry và buttons
+            entry_area = ttk.Frame(input_frame, style='Main.TFrame')
+            entry_area.grid(column=0, row=0, sticky=(ttk.E, ttk.W))
+            entry_area.grid_columnconfigure(0, weight=1)
+
+            # Entry field
             self.entry = ttk.Entry(
-                input_frame, 
-                style='Custom.TEntry',
-                font=('Helvetica', 14)  # Larger font
+                entry_area,
+                style='Custom.TEntry'
             )
-            self.entry.grid(column=0, row=0, sticky=(ttk.W, ttk.E))
+            self.entry.grid(column=0, row=0, sticky=(ttk.E, ttk.W), pady=(0, 10))
+            
+            # Buttons for mic and submit
+            button_frame = ttk.Frame(entry_area, style='Main.TFrame')
+            button_frame.grid(column=0, row=1, sticky=(ttk.E))
             
             mic_button = ttk.Button(
-                input_frame,
+                button_frame,
                 image=self.mic_icon,
-                bootstyle="link-outline",
+                bootstyle="secondary-outline",
                 command=self.start_voice_input_thread
             )
-            mic_button.grid(column=1, row=0, padx=8)  # Increased spacing
+            mic_button.pack(side='left', padx=5)
             
             submit_button = ttk.Button(
-                input_frame,
+                button_frame,
                 text='Submit',
-                style='Custom.TButton',
                 bootstyle="success",
                 command=self.execute_user_request
             )
-            submit_button.grid(column=2, row=0, padx=(8, 0))  # Increased spacing
+            submit_button.pack(side='left')
 
-            # Status displays with larger wraplength
+            # Status area (expanded)
+            status_frame = ttk.Frame(input_frame, style='Main.TFrame')
+            status_frame.grid(column=0, row=1, sticky=(ttk.N, ttk.S, ttk.E, ttk.W), pady=20)
+            status_frame.grid_rowconfigure(1, weight=1)
+            
             self.input_display = ttk.Label(
-                frame,
+                status_frame,
                 text='',
                 style='Status.TLabel',
-                wraplength=700  # Increased from 440
+                wraplength=300
             )
-            self.input_display.grid(column=0, row=2, sticky=(ttk.W, ttk.E), pady=15)
+            self.input_display.pack(fill='x', pady=5)
             
             self.message_display = ttk.Label(
-                frame,
+                status_frame,
                 text='',
                 style='Status.TLabel',
-                wraplength=700  # Increased from 440
+                wraplength=300
             )
-            self.message_display.grid(column=0, row=3, sticky=(ttk.W, ttk.E))
+            self.message_display.pack(fill='x', pady=5)
 
-            # Control buttons with more spacing
-            button_frame = ttk.Frame(frame)
-            button_frame.grid(column=0, row=4, sticky=(ttk.E), pady=30)  # Increased spacing
+            # Bottom controls - đặt cao hơn một chút
+            control_frame = ttk.Frame(frame, style='Main.TFrame')
+            control_frame.grid(column=0, row=2, sticky=(ttk.E, ttk.W), pady=(0, 90), padx=30)  # Tăng padding phía dưới
             
+            # Container cho các buttons
+            button_container = ttk.Frame(control_frame, style='Main.TFrame')
+            button_container.pack(fill='x', expand=True, pady=20)  # Thêm padding dọc
+            
+            # Settings button (bên trái)
             settings_button = ttk.Button(
-                button_frame,
+                button_container,
                 text='Settings',
-                style='Custom.TButton',
                 bootstyle="info-outline",
-                command=self.open_settings
+                command=self.open_settings,
+                padding=10
             )
-            settings_button.pack(side='left', padx=8)  # Increased spacing
+            settings_button.pack(side='left')
             
+            # Stop button (bên phải)
             stop_button = ttk.Button(
-                button_frame,
+                button_container,
                 text='Stop',
-                style='Custom.TButton',
                 bootstyle="danger-outline",
-                command=self.stop_previous_request
+                command=self.stop_previous_request,
+                padding=10
             )
-            stop_button.pack(side='left', padx=8)  # Increased spacing
+            stop_button.pack(side='right')
+
+            # Status area (expanded) - đặt sau controls
+            status_frame = ttk.Frame(input_frame, style='Main.TFrame')
+            status_frame.grid(column=0, row=1, sticky=(ttk.N, ttk.S, ttk.E, ttk.W), pady=(20, 0))
+            status_frame.grid_rowconfigure(0, weight=1)
+            
+            self.input_display = ttk.Label(
+                status_frame,
+                text='',
+                style='Status.TLabel',
+                wraplength=300
+            )
+            self.input_display.pack(fill='x', pady=5)
+            
+            self.message_display = ttk.Label(
+                status_frame,
+                text='',
+                style='Status.TLabel',
+                wraplength=300
+            )
+            self.message_display.pack(fill='x', pady=5)
+
+            # Thêm style cho buttons
+            style = ttk.Style()
+            style.configure('info-outline.TButton',
+                font=('Segoe UI', 10),
+                background='#1a1a2e',
+                foreground='#16c79a',
+                bordercolor='#16c79a',
+                borderwidth=1
+            )
+            
+            style.configure('danger-outline.TButton',
+                font=('Segoe UI', 10),
+                background='#1a1a2e',
+                foreground='#e94560',
+                bordercolor='#e94560',
+                borderwidth=1
+            )
 
             # Bind keyboard shortcuts
             self.entry.bind("<Return>", lambda e: self.execute_user_request())
