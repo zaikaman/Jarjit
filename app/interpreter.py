@@ -1,8 +1,10 @@
 from multiprocessing import Queue
 from time import sleep
 from typing import Any
+import os
 
 import pyautogui
+import pyperclip
 
 
 class Interpreter:
@@ -44,9 +46,9 @@ class Interpreter:
 
     def execute_function(self, function_name: str, parameters: dict[str, Any]) -> None:
         """
-            We are expecting only two types of function calls below
-            1. time.sleep() - to wait for web pages, applications, and other things to load.
-            2. pyautogui calls to interact with system's mouse and keyboard.
+        We are expecting only two types of function calls below
+        1. time.sleep() - to wait for web pages, applications, and other things to load.
+        2. pyautogui calls to interact with system's mouse and keyboard.
         """
         # Sometimes pyautogui needs warming up i.e. sometimes first call isn't executed hence padding a random call here
         pyautogui.press("command", interval=0.2)
@@ -57,23 +59,23 @@ class Interpreter:
             # Execute the corresponding pyautogui function i.e. Keyboard or Mouse commands.
             function_to_call = getattr(pyautogui, function_name)
 
-            # Special handling for the 'write' function
+            # Special handling for the 'write' function to support Vietnamese
             if function_name == 'write' and ('string' in parameters or 'text' in parameters):
-                # 'write' function expects a string, not a 'text' keyword argument but LLM sometimes gets confused on the parameter name.
                 string_to_write = parameters.get('string') or parameters.get('text')
                 interval = parameters.get('interval', 0.1)
-                function_to_call(string_to_write, interval=interval)
+                
+                # Handle Vietnamese text by using pyperclip
+                pyperclip.copy(string_to_write)
+                pyautogui.hotkey('ctrl', 'v') if os.name == 'nt' else pyautogui.hotkey('command', 'v')
+                
             elif function_name == 'press' and ('keys' in parameters or 'key' in parameters):
-                # 'press' can take a list of keys or a single key
                 keys_to_press = parameters.get('keys') or parameters.get('key')
                 presses = parameters.get('presses', 1)
                 interval = parameters.get('interval', 0.1)
                 function_to_call(keys_to_press, presses=presses, interval=interval)
             elif function_name == 'hotkey':
-                # 'hotkey' function expects multiple key arguments, not a list
                 function_to_call(*parameters['keys'])
             else:
-                # For other functions, pass the parameters as they are
                 function_to_call(**parameters)
         else:
             print(f'No such function {function_name} in our interface\'s interpreter')
